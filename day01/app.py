@@ -1,8 +1,6 @@
 file = open('input', 'r')
 Lines = file.readlines()
 
-previous_value = None
-increase_count = 0
 ##########
 # part 1 #
 ##########

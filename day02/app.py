@@ -7,14 +7,14 @@ Lines = file.readlines()
 horizontal = 0
 depth = 0
 for line in Lines:
-  action, value = line.strip().split(' ')
-  value = int(value)
-  if action == 'down':
-    depth += value
-  elif action == 'up':
-    depth -= value
-  elif action == 'forward':
-    horizontal += value
+    action, value = line.strip().split(' ')
+    value = int(value)
+    if action == 'down':
+        depth += value
+    elif action == 'up':
+        depth -= value
+    elif action == 'forward':
+        horizontal += value
 print(horizontal * depth)
 
 ###########
@@ -24,13 +24,13 @@ horizontal = 0
 depth = 0
 aim = 0
 for line in Lines:
-  action, value = line.strip().split(' ')
-  value = int(value)
-  if action == 'down':
-    aim += value
-  elif action == 'up':
-    aim -= value
-  elif action == 'forward':
-    horizontal += value
-    depth += (aim * value)
+    action, value = line.strip().split(' ')
+    value = int(value)
+    if action == 'down':
+        aim += value
+    elif action == 'up':
+        aim -= value
+    elif action == 'forward':
+        horizontal += value
+        depth += (aim * value)
 print(horizontal * depth)

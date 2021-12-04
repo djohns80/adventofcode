@@ -1,8 +1,3 @@
-#file = open('sample', 'r')
-file = open('input', 'r')
-Lines = file.readlines()
-Lines = [l.strip() for l in Lines]
-
 def separate_numbers(numbers, position):
     separated = {}
     for number in numbers:
@@ -36,6 +31,11 @@ def get_rating(numbers, check):
     return int(temp[0], 2)
 
 if __name__ == '__main__':
+    #file = open('sample', 'r')
+    file = open('input', 'r')
+    Lines = file.readlines()
+    Lines = [l.strip() for l in Lines]
+
     oxygen_generator_rating = get_rating(Lines, 'most')
     co2_generator_rating = get_rating(Lines, 'least')
     print(oxygen_generator_rating * co2_generator_rating)

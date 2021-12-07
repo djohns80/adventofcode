@@ -1,5 +1,3 @@
-import re
-
 if __name__ == '__main__':
 #    file = open('sample', 'r')
     file = open('input', 'r')
@@ -37,7 +35,7 @@ if __name__ == '__main__':
 ##########
     missing_seat_ids = list(set([i for i in range(128 * 8)]) - set(seat_ids))
     non_sequential = []
-    for i in range(len(missing_seat_ids)):
+    for i, s in enumerate(missing_seat_ids):
         if i == 0:
             if missing_seat_ids[i] + 1 !=  missing_seat_ids[i+1]:
                 non_sequential.append(missing_seat_ids[i])

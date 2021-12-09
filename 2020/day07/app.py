@@ -33,6 +33,7 @@ def bag_count(bag_collection, bag_name, part):
                 if b['type'] == 'shiny gold':
                     count += 1
                 count += bag_count(bag_collection, b['type'], part)
+
 ###########
 ## part 2 #
 ###########

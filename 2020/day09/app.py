@@ -18,7 +18,7 @@ if __name__ == '__main__':
     print(invalid_number)
 
 ###########
-## part 1 #
+## part 2 #
 ###########
     for n in range(len(lines)):
         sum = lines[n]

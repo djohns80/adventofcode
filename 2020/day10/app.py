@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print(counts[1] * counts[3])
 
 ###########
-## part 1 #
+## part 2 #
 ###########
     sol = {0:1}
     for line in lines[1:]:

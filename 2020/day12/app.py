@@ -38,7 +38,7 @@ if __name__ == '__main__':
     print(abs(east) + abs(north))
 
 ###########
-## part 1 #
+## part 2 #
 ###########
     w_east = 10
     w_north = 1

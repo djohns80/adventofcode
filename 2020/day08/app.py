@@ -30,8 +30,9 @@ if __name__ == '__main__':
     instructions = [{'operation': line.split(' ')[0], 'argument': int(line.split(' ')[1])} for line in lines]
     infinite, result = execute_boot(instructions)
     print(result)
+
 ###########
-## part 1 #
+## part 2 #
 ###########
     for n,i in enumerate(instructions):
         instructions_temp = copy.deepcopy(instructions)

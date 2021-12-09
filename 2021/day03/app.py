@@ -33,9 +33,27 @@ def get_rating(numbers, check):
 if __name__ == '__main__':
     #file = open('sample', 'r')
     file = open('input', 'r')
-    Lines = file.readlines()
-    Lines = [l.strip() for l in Lines]
+    lines = file.readlines()
+    lines = [l.strip() for l in lines]
 
-    oxygen_generator_rating = get_rating(Lines, 'most')
-    co2_generator_rating = get_rating(Lines, 'least')
+############
+### part 1 #
+############
+    line_count = len(lines)
+    common = []
+    for line in lines:
+        for n, b in enumerate(line):
+            if len(common) <= n:
+                common.append(int(b))
+            else:
+                common[n] += int(b)
+    gamma = int(''.join([str(int(b > (line_count / 2))) for b in common]), 2)
+    epsilon = int(''.join([str(int(not b > (line_count / 2))) for b in common]), 2)
+    print(gamma * epsilon)
+
+############
+### part 2 #
+############
+    oxygen_generator_rating = get_rating(lines, 'most')
+    co2_generator_rating = get_rating(lines, 'least')
     print(oxygen_generator_rating * co2_generator_rating)

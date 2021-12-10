@@ -37,9 +37,9 @@ if __name__ == '__main__':
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     grid = [list(line) for line in lines]
     old_grid = None
     while grid != old_grid:

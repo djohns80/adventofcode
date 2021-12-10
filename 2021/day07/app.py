@@ -7,16 +7,16 @@ if __name__ == '__main__':
 
     horiz_crab = [int(i) for i in input.split(',')]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     median = int(statistics.median(horiz_crab))
     fuel = [abs(median-h) for h in horiz_crab]
     print(sum(fuel))
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     results = []
     for x in range(min(horiz_crab), max(horiz_crab)+1):
         fuel = [abs(x-h)*(1+abs(x-h))/2 for h in horiz_crab]

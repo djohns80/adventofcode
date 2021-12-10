@@ -5,9 +5,9 @@ if __name__ == '__main__':
     lines = [l.strip() for l in lines]
     directions = [{'action': l[0], 'value': int(l[1:])} for l in lines]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     east = 10
     north = 1
     facing = 0
@@ -37,9 +37,9 @@ if __name__ == '__main__':
                 north -= d['value']
     print(abs(east) + abs(north))
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     w_east = 10
     w_north = 1
     s_east = 0

@@ -2,9 +2,9 @@ if __name__ == '__main__':
     file = open('input', 'r')
     Lines = file.readlines()
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     horizontal = 0
     depth = 0
     for line in Lines:
@@ -18,9 +18,9 @@ if __name__ == '__main__':
             horizontal += value
     print(horizontal * depth)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     horizontal = 0
     depth = 0
     aim = 0

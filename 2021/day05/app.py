@@ -19,9 +19,9 @@ if __name__ == '__main__':
             step = 1 if s['x2'] > s['x1'] else -1
             for x in range(s['x1'], s['x2']+step, step):
                 coords[s['y1']][x] += 1
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
         else:
             step_y = 1 if s['y2'] > s['y1'] else -1
             step_x = 1 if s['x2'] > s['x1'] else -1

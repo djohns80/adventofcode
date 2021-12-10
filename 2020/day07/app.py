@@ -34,9 +34,9 @@ def bag_count(bag_collection, bag_name, part):
                     count += 1
                 count += bag_count(bag_collection, b['type'], part)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
             elif part == 2:
                 current_bag_type_count = b['count']
                 count += current_bag_type_count

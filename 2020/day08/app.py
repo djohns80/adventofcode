@@ -31,9 +31,9 @@ if __name__ == '__main__':
     infinite, result = execute_boot(instructions)
     print(result)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     for n,i in enumerate(instructions):
         instructions_temp = copy.deepcopy(instructions)
         if i['operation'] == 'jmp':

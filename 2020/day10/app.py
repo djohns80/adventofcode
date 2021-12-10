@@ -16,9 +16,9 @@ if __name__ == '__main__':
     counts = dict(Counter(diffs))
     print(counts[1] * counts[3])
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     sol = {0:1}
     for line in lines[1:]:
         sol[line] = 0

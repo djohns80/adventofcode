@@ -36,9 +36,9 @@ if __name__ == '__main__':
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 
-############
-### part 1 #
-############
+##########
+# part 1 #
+##########
     line_count = len(lines)
     common = []
     for line in lines:
@@ -51,9 +51,9 @@ if __name__ == '__main__':
     epsilon = int(''.join([str(int(not b > (line_count / 2))) for b in common]), 2)
     print(gamma * epsilon)
 
-############
-### part 2 #
-############
+##########
+# part 2 #
+##########
     oxygen_generator_rating = get_rating(lines, 'most')
     co2_generator_rating = get_rating(lines, 'least')
     print(oxygen_generator_rating * co2_generator_rating)

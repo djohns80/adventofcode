@@ -41,13 +41,13 @@ def play_bingo(data):
                 sum_unmarked = sum([c[0] for r in boards[wb] for c in r if not c[1]])
                 print(n * sum_unmarked)
                 boards.remove(boards[wb])
-############
-### part 1 #
-############
+##########
+# part 1 #
+##########
 #                return
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
                 if len(boards) == 0:
                     return
 

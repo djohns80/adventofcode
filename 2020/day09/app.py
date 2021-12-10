@@ -17,9 +17,9 @@ if __name__ == '__main__':
             break
     print(invalid_number)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     for n in range(len(lines)):
         sum = lines[n]
         i = 1

@@ -36,9 +36,9 @@ if __name__ == '__main__':
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     opens = ['(','[','{','<']
     closes = [')',']','}','>']
     points = {
@@ -63,9 +63,9 @@ if __name__ == '__main__':
             incomplete_lines.remove(orig_line)
     print(sum([points[w] for w in wrongs]))
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     points = {
         ')': 1,
         ']': 2,

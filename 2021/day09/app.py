@@ -22,15 +22,15 @@ if __name__ == '__main__':
 
     grid = [[int(v) for v in list(l)] for l in lines]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     lowest_points = [grid[r][c] for r in range(len(grid)) for c in range(len(grid[r])) if all([grid[r][c] < grid[ra][ca] for ra, ca in get_adjacents(r, c)])]
     print(sum([l+1 for l in lowest_points]))
 
-############
-### part 2 #
-############
+##########
+# part 2 #
+##########
     used = []
     basin_sizes = [get_basin(r, c) for r in range(len(grid)) for c in range(len(grid[0])) if grid[r][c] != 9 and (r, c) not in used]
     basin_sizes.sort(reverse=True)

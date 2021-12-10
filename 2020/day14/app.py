@@ -6,9 +6,9 @@ if __name__ == '__main__':
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 
-#############
-#### part 1 #
-#############
+##########
+# part 1 #
+##########
     mem = {}
     mask = None
     for line in lines:
@@ -28,9 +28,9 @@ if __name__ == '__main__':
             mem[mem_address] = int(''.join(result), 2)
     print(sum([t for t in mem.values()]))
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     mem = {}
     mask = None
     for line in lines:

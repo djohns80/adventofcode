@@ -35,9 +35,9 @@ if __name__ == '__main__':
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 
-###########
-## part 1 #
-###########
+##########
+# part 1 #
+##########
     count = 0
     for line in lines:
         unique_signals = line.split('|')[0].strip().split(' ')
@@ -45,9 +45,9 @@ if __name__ == '__main__':
         count += len([t for t in output_value if len(t) in [2,4,3,7]])
     print(count)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     sum = 0
     for line in lines:
         unique_signals = line.split('|')[0].strip().split(' ')

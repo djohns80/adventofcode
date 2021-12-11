@@ -8,8 +8,8 @@ if __name__ == '__main__':
 ##########
 # part 1 #
 ##########
-    east = 10
-    north = 1
+    east = 0
+    north = 0
     facing = 0
     for d in directions:
         if d['action'] == 'N': # means to move north by the given value.

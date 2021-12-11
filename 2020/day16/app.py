@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     your_ticket = {}
     for fid, v in enumerate(input['your_ticket']):
-        your_ticket[matched_field_ids[fid][0]] = v 
+        your_ticket[matched_field_ids[fid][0]] = v
 
     departure_values = [v for k, v in your_ticket.items() if k.startswith('departure')]
     print(math.prod(departure_values))

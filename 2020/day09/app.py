@@ -20,8 +20,8 @@ if __name__ == '__main__':
 ##########
 # part 2 #
 ##########
-    for n in range(len(lines)):
-        sum = lines[n]
+    for n, v in enumerate(lines):
+        sum = v
         i = 1
         while sum < invalid_number:
             sum += lines[n+i]

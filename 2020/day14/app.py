@@ -20,11 +20,11 @@ if __name__ == '__main__':
             mem_address = int(mem_match[1])
             mem_value = f'{int(mem_match[2]):036b}'
             result = ['']*len(mask)
-            for b in range(len(mask)):
-                if mask[b] == 'X':
+            for b, v in enumerate(mask):
+                if v == 'X':
                     result[b] = mem_value[b]
                 else:
-                    result[b] = mask[b]
+                    result[b] = v
             mem[mem_address] = int(''.join(result), 2)
     print(sum([t for t in mem.values()]))
 
@@ -42,11 +42,11 @@ if __name__ == '__main__':
             mem_address = f'{int(mem_match[1]):036b}'
             mem_value = int(mem_match[2])
             result = ['']*len(mask)
-            for b in range(len(mask)):
-                if mask[b] == '0':
+            for b, v in enumerate(mask):
+                if v == '0':
                     result[b] = mem_address[b]
                 else:
-                    result[b] = mask[b]
+                    result[b] = v
             pop_addresses = [''.join(result)]
             final_addresses = []
             while len(pop_addresses) > 0:

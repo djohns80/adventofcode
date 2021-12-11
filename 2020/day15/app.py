@@ -1,5 +1,3 @@
-import re
-
 if __name__ == '__main__':
 #    input = '0,3,6'
     input = '5,2,8,16,18,0,1'
@@ -11,11 +9,11 @@ if __name__ == '__main__':
 ##########
 # part 1 #
 ##########
-#    turns = 2020
+    turns = 2020
 ##########
 # part 2 #
 ##########
-    turns = 30000000
+#    turns = 30000000
 
     for i, n in enumerate(numbers):
         last_spoken = int(n)
@@ -35,4 +33,3 @@ if __name__ == '__main__':
             numbers_spoken[last_spoken] = (0, turn)
         turn += 1
     print(last_spoken)
-

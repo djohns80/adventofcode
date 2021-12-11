@@ -23,11 +23,11 @@ def match_pairs(data):
 
 def complete_line(data):
     temp = ''
-    for c in data:
-        if c in opens:
-            temp += c
-        elif c in closes:
-            temp = temp[0 : temp.rindex(opens[closes.index(c)])] + temp[temp.rindex(opens[closes.index(c)])+1:]
+    for d in data:
+        if d in opens:
+            temp += d
+        elif d in closes:
+            temp = temp[0 : temp.rindex(opens[closes.index(d)])] + temp[temp.rindex(opens[closes.index(d)])+1:]
     return ''.join([closes[opens.index(c)] for c in temp[::-1]])
 
 if __name__ == '__main__':

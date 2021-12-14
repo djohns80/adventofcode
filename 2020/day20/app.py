@@ -53,13 +53,6 @@ def flip_diagonal_backward(tile_id):
     tiles[tile_id] = [''.join([tiles[tile_id][y][x] for y in range(len(tiles[tile_id]))]) for x in range(len(tiles[tile_id][0]))]
     match_tiles()
 
-def print_tile(tile_ids):
-    for r in range(len(tiles[tile_ids[0]])):
-        line = []
-        for tid in tile_ids:
-            line.append(tiles[tid][r][None:None])
-        print('|'.join(line))
-
 def get_master_image(tile_ids):
     master_lines = []
     for tile_row in tile_ids:
@@ -71,13 +64,18 @@ def get_master_image(tile_ids):
     return master_lines
 
 def count_monsters(full_image):
-    monster = [(18,0),(0,1),(5,1),(6,1),(11,1),(12,1),(17,1),(18,1),(19,1),(1,2),(4,2),(7,2),(10,2),(13,2),(16,2)]
+    monster = [
+        '                  # ',
+        '#    ##    ##    ###',
+        ' #  #  #  #  #  #   '
+    ]
+    points = [(x,y) for y,l in enumerate(monster) for x,c in enumerate(l) if c =='#']
     count = 0
     for y, r in enumerate(full_image[:-2]):
         for x in range(len(r)-20):
-            if all([full_image[y+my][x+mx] == '#' for mx, my in monster]):
+            if all([full_image[y+my][x+mx] == '#' for mx, my in points]):
                 count += 1
-    return count * len(monster)
+    return count * len(points)
 
 if __name__ == '__main__':
 #    file = open('sample', 'r')
@@ -95,7 +93,17 @@ if __name__ == '__main__':
 ##########
 # part 2 #
 ##########
-    methods = {
+    methods_y = {
+        'top': None,
+        'top-reverse': 'flip_vertical',
+        'right': 'rotate_anticlockwise',
+        'right-reverse': 'flip_diagonal_forward',
+        'bottom': 'flip_horizontal',
+        'bottom-reverse': 'rotate_180',
+        'left': 'flip_diagonal_backward',
+        'left-reverse': 'rotate_clockwise'
+    }
+    methods_x = {
         'top': 'flip_diagonal_backward',
         'top-reverse': 'rotate_anticlockwise',
         'right': 'flip_vertical',
@@ -105,67 +113,39 @@ if __name__ == '__main__':
         'left': None,
         'left-reverse': 'flip_horizontal'
     }
-#    master_grid = [
-#        [1753, 2693, 1583, 3559, 3851, 2473, 2689, 2879, 2503, 2351, 1579, 2843],
-#        [1609, 2393, 1123, 2003, 1543, 2857, 2797, 1117, 2161, 3739, 3823, 2549],
-#    ]
-    flip_vertical(1609)
-    flip_horizontal(1559)
-    flip_diagonal_forward(1297)
-    flip_horizontal(2153)
-    rotate_clockwise(2447)
-    rotate_180(1069)
-    flip_vertical(1483)
-    rotate_anticlockwise(1031)
-    rotate_180(1787)
-    flip_vertical(1489)
 
-    master_grid = [
-        [1753],
-        [1609],
-        [1559],
-        [1297],
-        [3793],
-        [2153],
-        [2447],
-        [1069],
-        [1483],
-        [1031],
-        [1787],
-        [1489]
-    ]
+    # Start with arbitrary first corner
+    master_grid = [[[k for k, v in tile_matches.items() if len([t for t in v.values() if t is not None]) == 2][0]]]
+    # Rotate this starting corner to be in correct orientation (left and top have no match)
+    sides = set([k for k,v in tile_matches[master_grid[0][0]].items() if v is not None])
+    if sides == {'bottom', 'left'}:
+        rotate_anticlockwise(master_grid[0][0])
+    elif sides == {'top', 'left'}:
+        rotate_180(master_grid[0][0])
+    elif sides == {'top', 'right'}:
+        rotate_clockwise(master_grid[0][0])
+    bottom_match = tile_matches[master_grid[-1][0]]['bottom']
+    # Transform each bottom match so that it matches with top
+    while bottom_match:
+        master_grid.append([bottom_match[0]])
+        if methods_y[bottom_match[1]]:
+            locals()[methods_y[bottom_match[1]]](bottom_match[0])
+        bottom_match = tile_matches[master_grid[-1][0]]['bottom']
+    # Go across each row matching right to make left
     for yo in master_grid:
-        for co in range(11):
-            right_match = tile_matches[yo[co]]['right']
-            if methods[right_match[1]]:
-                locals()[methods[right_match[1]]](right_match[0])
+        right_match = tile_matches[yo[0]]['right']
+        while right_match:
             yo.append(right_match[0])
-
-    tiles['master'] = get_master_image(master_grid)
-#    rotate_clockwise('master')
-#    rotate_anticlockwise('master')
-#    rotate_180('master')
-#    flip_horizontal('master')
-#    flip_vertical('master')
-#    flip_diagonal_forward('master')
-    flip_diagonal_backward('master')
-    monster_hash_count = count_monsters(tiles['master'])
+            if methods_x[right_match[1]]:
+                locals()[methods_x[right_match[1]]](right_match[0])
+            right_match = tile_matches[yo[-1]]['right']
+    monster_hash_count = 0
+    # rotate master grid until monsters found
+    for action in [None, 'rotate_clockwise','rotate_anticlockwise','rotate_180','flip_horizontal','flip_vertical','flip_diagonal_forward','flip_diagonal_backward']:
+        tiles['master'] = get_master_image(master_grid)
+        if action:
+            locals()[action]('master')
+        monster_hash_count = count_monsters(tiles['master'])
+        if monster_hash_count != 0:
+            break
     print(len(''.join(tiles['master'])) - len(''.join(tiles['master']).replace('#','')) - monster_hash_count)
-
-
-##1951    2729    2971
-##2311    1427    1489
-##3079    2473    1171
-#    rotate_clockwise(1951)
-#    rotate_clockwise(2729)
-#    rotate_clockwise(2971)
-#    rotate_clockwise(2311)
-#    rotate_clockwise(1427)
-#    rotate_clockwise(1489)
-#    flip_diagonal_backward(3079)
-#    rotate_180(2473)
-#    rotate_anticlockwise(1171)
-#
-#    master_image = get_master_image([[1951,2729,2971],[2311,1427,1489],[3079,2473,1171]])
-#    monster_hash_count = count_monsters(master_image)
-#    print(len(''.join(master_image)) - len(''.join(master_image).replace('#','')) - monster_hash_count)

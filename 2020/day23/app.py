@@ -41,8 +41,8 @@ if __name__ == '__main__':
         x = solved[x]
     print(res)
 
-###########
-## part 2 #
-###########
+##########
+# part 2 #
+##########
     solved = solve_game(cups, 1000000, 10000000)
     print(solved[1] * solved[solved[1]])

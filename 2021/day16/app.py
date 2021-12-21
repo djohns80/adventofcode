@@ -67,6 +67,6 @@ if __name__ == '__main__':
     print(part1)
 
 ##########
-# part 1 #
+# part 2 #
 ##########
     print(part2)

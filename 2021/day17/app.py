@@ -29,6 +29,6 @@ if __name__ == '__main__':
     print(max(targets.values()))
 
 ##########
-# part 1 #
+# part 2 #
 ##########
     print(len(targets))

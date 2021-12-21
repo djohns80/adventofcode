@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print(get_magnitude(final_number))
 
 ##########
-# part 1 #
+# part 2 #
 ##########
     number_pairs = [(l1,l2) for l1 in lines for l2 in lines if l1 != l2]
     max_magnitude = 0

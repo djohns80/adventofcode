@@ -70,6 +70,6 @@ if __name__ == '__main__':
     print(len(results[1]))
 
 ##########
-# part 1 #
+# part 2 #
 ##########
     print(max([sum([abs(i - j) for i,j in zip(*[av, bv])]) for ai,av in enumerate(results[0].values()) for bv in list(results[0].values())[ai:] if av != bv]))

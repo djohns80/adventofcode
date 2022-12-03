@@ -27,7 +27,7 @@ def get_re(s):
 
 if __name__ == '__main__':
 #   file = open('sample', 'r')
-    file = open('input2', 'r')
+    file = open('input', 'r')
     lines = file.readlines()
     lines = [l.strip() for l in lines]
 

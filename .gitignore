@@ -1,3 +1,4 @@
 .venv
 .pylintrc
 **/input
+__pycache__

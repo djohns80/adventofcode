@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+
+  BucketName:
+    Type: String
+
+  BucketPrefix:
+    Type: String
+
+Resources:
+
+  Secrets:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W77
+            reason: KMS not required.
+    Properties:
+      Description: AoC Secrets
+      SecretString: |
+        {
+          "WebhookUrl": "",
+          "SessionToken": "",
+          "LeaderBoard": ""
+        }
+
+  Function:
+    Type: AWS::Serverless::Function
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W89
+            reason: VPC not required.
+          - id: W92
+            reason: Reserved concurrency not required.
+    Properties:
+      Handler: app.handler
+      Runtime: python3.9
+      Timeout: 30
+      Architectures:
+        - arm64
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource:
+                - !Sub 'arn:${AWS::Partition}:s3:::${BucketName}/${BucketPrefix}/*'
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource:
+                - !Ref Secrets
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref BucketName
+          S3_PREFIX: !Ref BucketPrefix
+          SECRET_ARN: !Ref Secrets
+      Events:
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(10 minutes)
+      CodeUri: ./lambda

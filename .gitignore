@@ -2,3 +2,5 @@
 .pylintrc
 **/input
 __pycache__
+samconfig.toml
+.aws-sam

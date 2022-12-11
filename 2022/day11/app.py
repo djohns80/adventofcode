@@ -48,14 +48,14 @@ def main(input_file):
 ###########
 ## part 2 #
 ###########
-    hcf = math.prod([v[0] for v in tests.values()]) # use hcf to increase performance
+    lcm = math.prod([v[0] for v in tests.values()]) # use lcm to increase performance
     inspections = defaultdict(int)
     items_copy = deepcopy(items)
     for _ in range(10000):
         for m, v in items_copy.items():
             for i in v:
                 new_i = operation(operations[m], i)
-                new_i = new_i % hcf
+                new_i = new_i % lcm
                 new_m = tests[m][1] if new_i % tests[m][0] == 0 else tests[m][2]
                 items_copy[new_m].append(new_i)
                 inspections[m] += 1

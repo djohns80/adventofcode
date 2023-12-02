@@ -1,6 +1,5 @@
 import os
 import re
-from collections import defaultdict
 
 
 def replace_number_words(line):
@@ -34,11 +33,11 @@ def main():
         encoding="utf-8",
     )
     content = file.read()
-    lines = [l.strip() for l in content.splitlines()]
+    lines = [line.strip() for line in content.splitlines()]
 
     part_1 = 0
-    for l in lines:
-        digits = ''.join(re.findall(r'[0-9]', l))
+    for line in lines:
+        digits = "".join(re.findall(r"[0-9]", line))
         part_1 += int(f"{digits[0]}{digits[-1]}")
     print(part_1)
 
@@ -51,7 +50,7 @@ def main():
         encoding="utf-8",
     )
     content = file.read()
-    lines = [l.strip() for l in content.splitlines()]
+    lines = [line.strip() for line in content.splitlines()]
 
     numbers = {
         "one": 1,
@@ -66,12 +65,12 @@ def main():
     }
 
     part_2 = 0
-    for l in lines:
-        digits = [None for i in range(len(l))]
-        for m1 in re.finditer(r'\d', l):
+    for line in lines:
+        digits = [None for i in range(len(line))]
+        for m1 in re.finditer(r"\d", line):
             digits[m1.start()] = int(m1.group())
         for k, v in numbers.items():
-            for m2 in re.finditer(k, l):
+            for m2 in re.finditer(k, line):
                 digits[m2.start()] = v
         digits = [d for d in digits if d]
         part_2 += int(f"{digits[0]}{digits[-1]}")

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!.venv/bin/python
 """ This script downloads a specified advent of code input file.
     It defaults to the current day/year but parameters can be used to define a specific day or year (or both). """
 

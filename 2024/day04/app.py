@@ -1,6 +1,5 @@
 import os
 from collections import defaultdict
-import re
 
 
 def count_xmas(grid, x, y):
@@ -54,12 +53,26 @@ def main():
     ##########
     # part 1 #
     ##########
-    print(sum(count_xmas(grid, x, y) for x in range(row_count) for y in range(col_count) if grid[(x, y)] == "X"))
+    print(
+        sum(
+            count_xmas(grid, x, y)
+            for x in range(row_count)
+            for y in range(col_count)
+            if grid[(x, y)] == "X"
+        )
+    )
 
     ##########
     # part 2 #
     ##########
-    print(sum(check_mas(grid, x, y) for x in range(row_count) for y in range(col_count) if grid[(x, y)] == "A"))
+    print(
+        sum(
+            check_mas(grid, x, y)
+            for x in range(row_count)
+            for y in range(col_count)
+            if grid[(x, y)] == "A"
+        )
+    )
 
 
 if __name__ == "__main__":

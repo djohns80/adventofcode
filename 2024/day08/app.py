@@ -4,7 +4,7 @@ from collections import defaultdict
 
 def main():
     file = open(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), "sample"),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
         "r",
         encoding="utf-8",
     )
@@ -30,12 +30,21 @@ def main():
                 vec = loc1 - loc2
                 for loc, diff in [(loc1, vec), (loc2, -vec)]:
                     antinode = loc + diff
-                    if antinode.real >= 0 and antinode.real < col_count and antinode.imag >= 0 and antinode.imag < row_count:
+                    if (
+                        antinode.real >= 0
+                        and antinode.real < col_count
+                        and antinode.imag >= 0
+                        and antinode.imag < row_count
+                    ):
                         antinodes_1.append(antinode)
-                    while antinode.real >= 0 and antinode.real < col_count and antinode.imag >= 0 and antinode.imag < row_count:
+                    while (
+                        antinode.real >= 0
+                        and antinode.real < col_count
+                        and antinode.imag >= 0
+                        and antinode.imag < row_count
+                    ):
                         antinodes_2.append(antinode)
                         antinode += diff
-
 
     ##########
     # part 1 #

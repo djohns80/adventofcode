@@ -11,7 +11,6 @@ def main():
     lines = content.splitlines()
     start, end = None, None
     track_nodes = set()
-    walls = set()
     for y, line in enumerate(lines):
         for x, c in enumerate(line):
             match c:
@@ -21,8 +20,6 @@ def main():
                     end = complex(x, y)
                 case ".":
                     track_nodes.add(complex(x, y))
-                case "#":
-                    walls.add(complex(x, y))
     path = [start]
     while track_nodes:
         next_node = [n for n in track_nodes if abs(n - path[-1]) == 1][0]
@@ -45,9 +42,9 @@ def main():
     )
     print(len(cheats))
 
-    # ##########
-    # # part 2 #
-    # ##########
+    ##########
+    # part 2 #
+    ##########
     min_saving = 100
     cheat_duration = 20
     cheats = set(

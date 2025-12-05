@@ -16,8 +16,8 @@ def main():
     fresh_sorted = sorted(fresh_int, key=lambda tup: tup[0])
     fresh_merged = []
     for start, end in fresh_sorted:
-        if fresh_merged and start <= fresh_merged[-1][1] + 1:
-            fresh_merged[-1] = (fresh_merged[-1][0], max(fresh_merged[-1][1], end))
+        if fresh_merged and start <= fresh_merged[-1][1] + 1:  # +1 to handle adjacent but not overlapping
+            fresh_merged[-1] = (fresh_merged[-1][0], max(fresh_merged[-1][1], end))  # max to handle overlapping with smaller end
         else:
             fresh_merged.append((start, end))
     fresh = [range(start, end + 1) for start, end in fresh_merged]

@@ -53,7 +53,7 @@ def main():
             grid[r] = "x"
         removals = get_removable_rolls(grid)
         part_2 += len(removals)
-    print("part 1:", part_2)
+    print("part 2:", part_2)
 
 
 if __name__ == "__main__":

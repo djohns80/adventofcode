@@ -3,3 +3,4 @@ pywin32
 pycryptodomex
 sympy
 scipy
+shapely

@@ -1,26 +1,39 @@
-import argparse
 import os
-
-def main(input_file):
-    file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), input_file), 'r', encoding='utf-8')
-    lines = file.read().strip().split('\n')
-
-##########
-# part 1 #
-##########
-    ### TODO: complete part 1
-
-##########
-# part 2 #
-##########
-    ### TODO: complete part 2
+from itertools import combinations
+from math import prod
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-i', '--input', action='store_const', dest='input', const='input')
-    group.add_argument('-s', '--sample', action='store_const', dest='input', const='sample')
-    parser.set_defaults(input='input')
-    args = parser.parse_args()
-    main(args.input)
+def get_qe(weights, group_count):
+    target_weight = sum(weights) // group_count
+    for group_size in range(1, len(weights) + 1):
+        groups = [
+            g for g in combinations(weights, group_size) if sum(g) == target_weight
+        ]
+        if groups:
+            break
+    return min(map(prod, groups))
+
+
+def main():
+    with open(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
+        "r",
+        encoding="utf-8",
+    ) as file:
+        content = file.read()
+    lines = content.splitlines()
+    weights = [int(w) for w in lines]
+
+    ##########
+    # part 1 #
+    ##########
+    print("part 1:", get_qe(weights, 3))
+
+    ##########
+    # part 2 #
+    ##########
+    print("part 2:", get_qe(weights, 4))
+
+
+if __name__ == "__main__":
+    main()

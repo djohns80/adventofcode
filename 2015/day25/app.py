@@ -1,26 +1,35 @@
-import argparse
 import os
+import re
 
-def main(input_file):
-    file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), input_file), 'r', encoding='utf-8')
-    lines = file.read().strip().split('\n')
-
-##########
-# part 1 #
-##########
-    ### TODO: complete part 1
-
-##########
-# part 2 #
-##########
-    ### TODO: complete part 2
+CODE_1 = 20151125
+MULTIPLY = 252533
+DIVIDE = 33554393
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-i', '--input', action='store_const', dest='input', const='input')
-    group.add_argument('-s', '--sample', action='store_const', dest='input', const='sample')
-    parser.set_defaults(input='input')
-    args = parser.parse_args()
-    main(args.input)
+def pos_number(row, col):
+    diagonal = row + col - 1
+    codes_before = (diagonal - 1) * diagonal // 2
+    return codes_before + col
+
+
+def number_code(number):
+    return (pow(MULTIPLY, number - 1, DIVIDE) * CODE_1) % DIVIDE
+
+
+def main():
+    with open(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
+        "r",
+        encoding="utf-8",
+    ) as file:
+        content = file.read()
+    row, col = map(int, re.findall(r"\d+", content))
+
+    ##########
+    # part 1 #
+    ##########
+    print("part 1:", number_code(pos_number(row, col)))
+
+
+if __name__ == "__main__":
+    main()

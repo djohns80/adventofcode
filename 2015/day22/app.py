@@ -1,180 +1,108 @@
+import heapq
+import os
 
-def cast_spell(s, b, p):
-    print(f"Player casts {s['name']}.")
-    b['hp'] -= s['damage']
-    if b['hp'] <= 0:
-        print('This kills the boss, and the player wins.')
-        return 1
-    p['hp'] += s['hp']
-    if s['effect']:
-        p['effects'].append({'name': s['name'], **s['effect'].copy()})
-    p['mana'] -= s['mana']
-    return 0
+PLAYER_HP = 50
+PLAYER_MANA = 500
 
-def apply_effects(b, p):
-    for e in p['effects']:
-        p['armor'] = e['armor']
-        p['mana'] += e['mana']
-        b['hp'] -= e['damage']
-        e['duration'] -= 1
-        if e['damage'] > 0:
-            print(f"{e['name']} deals {e['damage']} damage; its timer is now {e['duration']}.")
-    if b['hp'] <= 0:
-        print('This kills the boss, and the player wins.')
-        return 1
-    p['effects'] = [e for e in p['effects'] if e['duration'] > 0]
-    return 0
+# effect timers are stored as a tuple indexed by these positions
+SHIELD, POISON, RECHARGE = 0, 1, 2
 
-def player_turn(b, p, s):
-    print(f"- Player has {p['hp']} hit points, {p['armor']} armor, {p['mana']} mana")
-    print(f"- Boss has {b['hp']} hit points")
-    if apply_effects(b, p) != 0:
-        return apply_effects(b, p)
-    return cast_spell(s, b, p)
+# name, cost, instant damage, heal, effect index, effect turns
+SPELLS = [
+    ("Magic Missile", 53, 4, 0, None, 0),
+    ("Drain", 73, 2, 2, None, 0),
+    ("Shield", 113, 0, 0, SHIELD, 6),
+    ("Poison", 173, 0, 0, POISON, 6),
+    ("Recharge", 229, 0, 0, RECHARGE, 5),
+]
 
-def boss_turn(b, p):
-    print(f"- Player has {p['hp']} hit points, {p['armor']} armor, {p['mana']} mana")
-    print(f"- Boss has {b['hp']} hit points")
-    if apply_effects(b, p) != 0:
-        return apply_effects(b, p)
-    print(f"Boss attacks for {(b['damage'] - p['armor'])} damage.")
-    p['hp'] -= (b['damage'] - p['armor'])
-    if p['hp'] <= 0:
-        print('This kills the player, and the boss wins.')
-        return -1
-    return 0
+
+def start_of_turn(boss_hp, mana, timers):
+    """Apply active effects, then tick their timers down. Returns the armor in force this turn."""
+    armor = 7 if timers[SHIELD] else 0
+    if timers[POISON]:
+        boss_hp -= 3
+    if timers[RECHARGE]:
+        mana += 101
+    return boss_hp, mana, armor, tuple(max(t - 1, 0) for t in timers)
+
+
+def least_mana_to_win(boss_hp, boss_damage, player_hp, mana, hard=False):
+    # Dijkstra on mana spent: the first winning state popped is the cheapest win
+    queue = [(0, player_hp, mana, boss_hp, (0, 0, 0))]
+    seen = set()
+    while queue:
+        spent, hp, mana, boss_hp, timers = heapq.heappop(queue)
+        if boss_hp <= 0:
+            return spent
+        state = (hp, mana, boss_hp, timers)
+        if state in seen:
+            continue
+        seen.add(state)
+
+        # player turn
+        if hard:
+            hp -= 1
+            if hp <= 0:
+                continue
+        boss_hp, mana, _, timers = start_of_turn(boss_hp, mana, timers)
+        if boss_hp <= 0:
+            heapq.heappush(queue, (spent, hp, mana, boss_hp, timers))
+            continue
+        for _, cost, damage, heal, effect, turns in SPELLS:
+            if cost > mana or (effect is not None and timers[effect]):
+                continue
+            new_timers = timers
+            if effect is not None:
+                new_timers = timers[:effect] + (turns,) + timers[effect + 1 :]
+            new_hp = hp + heal
+            new_mana = mana - cost
+            new_boss_hp = boss_hp - damage
+
+            # boss turn
+            if new_boss_hp > 0:
+                new_boss_hp, new_mana, armor, new_timers = start_of_turn(
+                    new_boss_hp, new_mana, new_timers
+                )
+                if new_boss_hp > 0:
+                    new_hp -= max(boss_damage - armor, 1)
+                    if new_hp <= 0:
+                        continue
+            heapq.heappush(
+                queue, (spent + cost, new_hp, new_mana, new_boss_hp, new_timers)
+            )
+    return None
+
 
 def main():
-    boss = {
-#        'hp': 51,
-        'hp': 14,
-        'mana': 0,
-#        'damage': 9,
-        'damage': 8,
-        'armor': 0
-    }
+    with open(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
+        "r",
+        encoding="utf-8",
+    ) as file:
+        content = file.read()
+    lines = content.splitlines()
+    boss = {}
+    for line in lines:
+        stat, value = line.split(":", 1)
+        boss[stat] = int(value)
 
-    spells = [
-#    Magic Missile costs 53 mana. It instantly does 4 damage.
-        {
-            'name': 'Magic Missle',
-            'mana': 53,
-            'damage': 4,
-            'hp': 0,
-            'effect': None
-        },
-#    Drain costs 73 mana. It instantly does 2 damage and heals you for 2 hit points.
-        {
-            'name': 'Drain',
-            'mana': 73,
-            'damage': 2,
-            'hp': 2,
-            'effect': None
-        },
-#    Shield costs 113 mana. It starts an effect that lasts for 6 turns. While it is active, your armor is increased by 7.
-        {
-            'name': 'Shield',
-            'mana': 113,
-            'damage': 0,
-            'hp': 0,
-            'effect': {
-                'duration': 5,   # 6
-                'armor': 7,
-                'damage': 0,
-                'mana': 0
-            }
-        },
-#    Poison costs 173 mana. It starts an effect that lasts for 6 turns. At the start of each turn while it is active, it deals the boss 3 damage.
-        {
-            'name': 'Poison',
-            'mana': 173,
-            'damage': 0,
-            'hp': 0,
-            'effect': {
-                'duration': 6,
-                'armor': 0,
-                'damage': 3,
-                'mana': 0
-            }
-        },
-#    Recharge costs 229 mana. It starts an effect that lasts for 5 turns. At the start of each turn while it is active, it gives you 101 new mana.
-        {
-            'name': 'Recharge',
-            'mana': 229,
-            'damage': 0,
-            'hp': 0,
-            'effect': {
-                'duration': 5,
-                'armor': 0,
-                'damage': 0,
-                'mana': 101
-            }
-        }
-    ]
+    ##########
+    # part 1 #
+    ##########
+    part_1 = least_mana_to_win(
+        boss["Hit Points"], boss["Damage"], PLAYER_HP, PLAYER_MANA
+    )
+    print("part 1:", part_1)
 
-##########
-# part 1 #
-##########
-    ### TODO: complete part 1
-    player = {
-#        'hp': 50,
-#        'mana': 500,
-        'hp': 10,
-        'mana': 250,
-        'damage': 0,
-        'armor': 0,
-        'effects': []
-    }
-
-    spell_list = [0,3,1,2,4]
-
-    while True:
-        print('-- Player turn --')
-        if player_turn(boss, player, spells[spell_list.pop()]) != 0:
-            break
-        print()
-        print('-- Boss turn --')
-        if boss_turn(boss, player) != 0:
-            break
-        print()
+    ##########
+    # part 2 #
+    ##########
+    part_2 = least_mana_to_win(
+        boss["Hit Points"], boss["Damage"], PLAYER_HP, PLAYER_MANA, hard=True
+    )
+    print("part 2:", part_2)
 
 
-
-
-#    print('-- Player turn --')
-#    player_turn(boss, player, spells[2])
-#    print()
-
-#    print('-- Boss turn --')
-#    boss_turn(boss, player)
-#    print()
-
-#    print(player)
-
-
-
-# Poison deals 3 damage; its timer is now 5.
-# Boss attacks for 8 damage.
-
-# -- Player turn --
-# - Player has 2 hit points, 0 armor, 77 mana
-# - Boss has 10 hit points
-# Poison deals 3 damage; its timer is now 4.
-# Player casts Magic Missile, dealing 4 damage.
-
-# -- Boss turn --
-# - Player has 2 hit points, 0 armor, 24 mana
-# - Boss has 3 hit points
-# Poison deals 3 damage. This kills the boss, and the player wins
-
-
-
-
-##########
-# part 2 #
-##########
-    ### TODO: complete part 2
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

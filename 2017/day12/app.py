@@ -1,26 +1,68 @@
-import argparse
 import os
 
-def main(input_file):
-    file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), input_file), 'r', encoding='utf-8')
-    lines = file.read().strip().split('\n')
-
-##########
-# part 1 #
-##########
-    ### TODO: complete part 1
-
-##########
-# part 2 #
-##########
-    ### TODO: complete part 2
+START_PROGRAM = 0
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-i', '--input', action='store_const', dest='input', const='input')
-    group.add_argument('-s', '--sample', action='store_const', dest='input', const='sample')
-    parser.set_defaults(input='input')
-    args = parser.parse_args()
-    main(args.input)
+def parse_pipes(lines):
+    """Return {program: [programs it can communicate with directly]}."""
+    pipes = {}
+    for line in lines:
+        if not line.strip():
+            continue
+        program_part, connections_part = line.split(" <-> ")
+        connections = []
+        for connection in connections_part.split(", "):
+            connections.append(int(connection))
+        pipes[int(program_part)] = connections
+    return pipes
+
+
+def find_group(pipes, start):
+    """Return the set of programs that can reach start through the pipes."""
+    group = {start}
+    to_visit = [start]
+    while to_visit:
+        program = to_visit.pop()
+        for neighbour in pipes[program]:
+            if neighbour not in group:
+                group.add(neighbour)
+                to_visit.append(neighbour)
+    return group
+
+
+def count_groups(pipes):
+    """Return how many separate groups the programs form."""
+    grouped = set()
+    group_count = 0
+    for program in pipes:
+        if program not in grouped:
+            grouped.update(find_group(pipes, program))
+            group_count += 1
+    return group_count
+
+
+def main():
+    with open(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
+        "r",
+        encoding="utf-8",
+    ) as file:
+        content = file.read()
+    lines = content.splitlines()
+    pipes = parse_pipes(lines)
+
+    ##########
+    # part 1 #
+    ##########
+    part_1 = len(find_group(pipes, START_PROGRAM))
+    print("part 1:", part_1)
+
+    ##########
+    # part 2 #
+    ##########
+    part_2 = count_groups(pipes)
+    print("part 2:", part_2)
+
+
+if __name__ == "__main__":
+    main()

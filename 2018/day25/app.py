@@ -1,26 +1,58 @@
-import argparse
 import os
 
-def main(input_file):
-    file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), input_file), 'r', encoding='utf-8')
-    lines = file.read().strip().split('\n')
-
-##########
-# part 1 #
-##########
-    ### TODO: complete part 1
-
-##########
-# part 2 #
-##########
-    ### TODO: complete part 2
+MAX_LINK_DISTANCE = 3
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-i', '--input', action='store_const', dest='input', const='input')
-    group.add_argument('-s', '--sample', action='store_const', dest='input', const='sample')
-    parser.set_defaults(input='input')
-    args = parser.parse_args()
-    main(args.input)
+def manhattan_distance(a, b):
+    total = 0
+    for a_coordinate, b_coordinate in zip(a, b):
+        total += abs(a_coordinate - b_coordinate)
+    return total
+
+
+def count_constellations(points):
+    """Count the groups of points that are chained together by links of at most MAX_LINK_DISTANCE."""
+    unvisited = set(range(len(points)))
+    constellations = 0
+    while unvisited:
+        # flood out from any point not yet in a constellation
+        constellations += 1
+        to_visit = [unvisited.pop()]
+        while to_visit:
+            current = points[to_visit.pop()]
+            linked = []
+            for index in unvisited:
+                if manhattan_distance(current, points[index]) <= MAX_LINK_DISTANCE:
+                    linked.append(index)
+            for index in linked:
+                unvisited.remove(index)
+                to_visit.append(index)
+    return constellations
+
+
+def main():
+    with open(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "input"),
+        "r",
+        encoding="utf-8",
+    ) as file:
+        content = file.read()
+    lines = content.splitlines()
+    points = []
+    for line in lines:
+        if not line.strip():
+            continue
+        coordinates = []
+        for value in line.split(","):
+            coordinates.append(int(value))
+        points.append(tuple(coordinates))
+
+    ##########
+    # part 1 #
+    ##########
+    part_1 = count_constellations(points)
+    print("part 1:", part_1)
+
+
+if __name__ == "__main__":
+    main()

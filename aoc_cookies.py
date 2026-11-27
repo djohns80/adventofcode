@@ -30,8 +30,10 @@ def get_cookies_firefox():
         cursor = connection.cursor()
         try:
             rows = cursor.execute('SELECT name, value FROM moz_cookies WHERE host = ".adventofcode.com"').fetchall()
-            logging.info('Cookies found...')
-            return rows
+            if rows:
+                logging.info('Cookies found...')
+                return rows
+            logging.info('No Advent of Code cookies in this profile, trying next...')
         except sqlite3.OperationalError:
             logging.warning('Cookies not found...')
     return []

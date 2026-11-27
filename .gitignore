@@ -4,3 +4,4 @@
 __pycache__
 samconfig.toml
 .aws-sam
+.submitted_answers.json
